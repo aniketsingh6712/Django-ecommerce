@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+    {%block content%}
+    <div>
+    <div class="main_container" style="display: flex;flex-direction: row;flex-wrap: wrap;justify-content: center;">
+        {% for item in api_data %}
+    <div class="product-card">
+        <img src={{item.url}} alt="Product Image" class="product-image">
+        <h2 class="product-name">{{item.name}}</h2>
+        <p class="product-price">
+            
+            ₹{{item.price}}<span>{% if item.category == "juices"%}/Liter {% else %}/Kg{% endif %}</span></p>
+        
+        
+        
+        <button class="add-to-cart"  id="sendDataButton"  onclick="sendData('[{{item.name}},{{item.id}},{{item.price}},{{item.category}},{{item.url}}]')">Add to Cart</button>
+    
+    </div>
+    
+    {% endfor %}
+    </div>
+    </div>
+    
+    
+    <script>
+        function sendData(value) {
+            $.ajax({
+                url: '{% url "data_add" %}',
+                type: 'POST',
+                data: {
+                    'data': value,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include the CSRF token
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(xhr, status, error) {
+                    alert('AJAX request failed: ' + error);
+                }
+            });
+        }
+    </script>
+    {% endblock %}

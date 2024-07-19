@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content%}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>Order Details</h2>
+            
+        </div>
+        <div style="display: flex;flex-direction: row;border-radius: 1px solid rgb(49, 203, 70);flex-wrap: wrap;">
+        {% for delivery in deliverys%}
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="delivery-address" class="font-weight-bold">Customer Name:</label>
+                <p id="delivery-address" class="ml-3">First Name:{{delivery.address.first_name}} <span>Last Name:{{delivery.address.last_name}}</span>
+                </p>
+            </div>
+            <div class="mb-3">
+                <label for="delivery-address" class="font-weight-bold">Delivery Address:</label>
+                <p id="delivery-address" class="ml-3">{{delivery.address.street1}},{{delivery.address.street2}},{{delivery.address.city}},
+                    {{delivery.address.state}}
+                <span>Pincode{{delivery.address.pincode}}</span>
+                </p>
+            </div>
+            <div class="mb-3">
+                <label for="delivery-item" class="font-weight-bold">Delivery Item:</label>
+                <p id="delivery-item" class="ml-3">
+                    {% for item in delivery.product%}
+                    <div>Item:{{item.name}},quantity:{{item.qty}}</div>
+                    {% endfor %}
+
+                </p>
+            </div>
+            <div class="mb-3">
+                <label for="delivery-item" class="font-weight-bold">Total Amount:</label>
+                <p id="delivery-item" class="ml-3">
+                    {{delivery.total_amt}}
+
+                </p>
+            </div>
+            <div class="mb-3">
+                <label for="delivery-item" class="font-weight-bold">Contact Details</label>
+                <p id="delivery-item" class="ml-3">Phone:{{delivery.address.Phone}}
+                    
+                </p>
+            </div>
+            <div class="mb-3">
+                <label for="payment-medium" class="font-weight-bold">Medium of Payment:</label>
+                <p id="payment-medium" class="ml-3">{{delivery.payment}}</p>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

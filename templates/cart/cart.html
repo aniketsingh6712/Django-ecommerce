@@ -1,0 +1,188 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="hero-wrap hero-bread" style="background-image: url({% static 'images/bg_1.jpg' %});">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Cart</span></p>
+            <h1 class="mb-0 bread">My Cart</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section ftco-cart" id="table">
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+	    				<table class="table" >
+							{% if cart_item%}
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        <th>&nbsp;</th>
+						        <th>Product name</th>
+						        <th>Price</th>
+						        <th>Quantity</th>
+						        <th>Total</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+								
+								{% for item in cart_item%}
+						      <tr class="text-center">
+						        <td class="product-remove" >
+									<button style="display: flex;justify-content: center;align-items:center;font-size: 25px;" 
+									onclick="sendData(`[{{item.id}},remove]`)">
+										<i class="fas fa-times"></i> 
+									</button>
+								</td>
+
+						        <td class="image-prod"><div class="img" style="background-image:url('{{item.url}}');"></div></td>
+
+						        <td class="product-name">
+						        	<h3>{{item.product.name}}</h3>
+						        	<p style="font-size: 15px;">{{item.product.details}}</p>
+						        </td>
+
+						        <td class="price">₹{{item.product.price}}</td>
+
+							
+								
+						        <td class="quantity">
+									<div style="display: flex;flex-direction: row;">
+									<button style="font-size: 20px;border: none;" onclick="sendData(`[{{item.id}},add]`)">
+										<i class="fas fa-plus" style="border: none;"></i>
+									</button>
+						        	<div class="input-group mb-3" style="display: flex;justify-content:center;">
+					             	{{item.quantity}}
+					          	</div>
+								  <button  style="font-size: 20px;border: none;" onclick="sendData(`[{{item.id}},sub]`)">
+									<i class="fas fa-minus"></i> 
+								</button>
+								</div>
+					          </td>
+
+						        <td class="total">₹{{item.total_price}}</td>
+						      </tr><!-- END TR-->
+							  {% endfor %}
+							  
+						    </tbody>
+							{% else%}
+							  <thead><h1 style="text-align: center;">CART IS EMPTY</h1></thead>
+						      {% endif%}
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+    		<div class="row justify-content-center">
+    			
+    			
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Cart Totals</h3>
+    					<p class="d-flex">
+    						<span>Subtotal</span>
+    						<span>₹{{total_price}}</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Delivery</span>
+    						<span>₹120</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Discount</span>
+    						<span>₹30.00</span>
+    					</p>
+    					<hr>
+    					<p class="d-flex total-price">
+    						<span>Total</span>
+    						<span>{{price_after_check}}</span>
+    					</p>
+    				</div>
+    				<p><a href="{% url 'checkout' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+    			</div>
+    		</div>
+			</div>
+		</section>
+
+		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
+      <div class="container py-4">
+        <div class="row d-flex justify-content-center py-5">
+          <div class="col-md-6">
+          	<h2 style="font-size: 22px;" class="mb-0">Subcribe to our Newsletter</h2>
+          	<span>Get e-mail updates about our latest shops and special offers</span>
+          </div>
+          <div class="col-md-6 d-flex align-items-center">
+            <form action="#" class="subscribe-form">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control" placeholder="Enter email address">
+                <input type="submit" value="Subscribe" class="submit px-3">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+		window.onload = function() {
+        document.getElementById('table').scrollIntoView();
+    };
+  		$(document).ready(function(){
+
+  		var quantitiy=0;
+  		   $('.quantity-right-plus').click(function(e){
+
+  		        // Stop acting like a button
+  		        e.preventDefault();
+  		        // Get the field name
+  		        var quantity = parseInt($('#quantity').val());
+
+  		        // If is not undefined
+
+  		            $('#quantity').val(quantity + 1);
+
+
+  		            // Increment
+
+  		    });
+
+  		     $('.quantity-left-minus').click(function(e){
+  		        // Stop acting like a button
+  		        e.preventDefault();
+  		        // Get the field name
+  		        var quantity = parseInt($('#quantity').val());
+
+  		        // If is not undefined
+
+  		            // Increment
+  		            if(quantity>0){
+  		            $('#quantity').val(quantity - 1);
+  		            }
+  		    });
+
+  		});
+		  function sendData(value) {
+            $.ajax({
+                url: '{% url "operations" %}',
+                type: 'POST',
+                data: {
+                    'data': value,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include the CSRF token
+                },
+                success: function(response) {
+                    if(response.redirect_url){
+						window.location.href=response.redirect_url;
+					}
+                },
+                error: function(xhr, status, error) {
+                    alert('AJAX request failed: ' + error);
+                }
+            });
+        }
+  	</script>
+	
+{% endblock %}

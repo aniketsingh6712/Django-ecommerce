@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% include 'base/header.html' %}
+{% load static %}
+
+{% block content %}
+
+    <section class="ftco-section contact-section bg-light">
+      <div class="container">
+        <div class="row block-9">
+          <div class="col-md-6 order-md-last d-flex">
+            <form class="bg-white p-5 contact-form" action="{% url 'signin' %}" method="post">
+              {% csrf_token %}
+              {% for message in messages%}
+              <h3 style="color:red;font-weight: 700;">{{message}}</h3>
+              {% endfor %}
+              <div class="form-group">
+                <i class="fa fas fa-envelope icon"></i>
+                <input type="text" id="username" name="username" placeholder="UserName" required>
+            </div>
+            <div class="form-group">
+              <i class="fas fa-lock icon"></i>
+              <input type="password" id="password1" name="password" placeholder="Password" required>
+          </div>
+              <div class="form-group">
+                Don't have any account? Create one <a href="{% url 'signup' %}">here</a>.
+                <input type="submit" value="Sign In" class="btn btn-primary py-3 px-5">
+              </div>
+
+              
+            </form>
+          </div>
+          <div class="col-md-6 d-flex">
+          	
+              <div  class="bg-white" style="width:100%;position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-err-container">
+                <img src="{% static 'images/form-img.jpg'%}" alt="" height="100%" width="100%">
+              </div></div>
+
+            
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}
