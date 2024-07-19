@@ -25,11 +25,11 @@ python manage.py runserver
 ```
 </table>
 
-###
+### video of running app
 
 https://github.com/user-attachments/assets/8b34f32d-864b-45f5-986b-0e753f7a3b50
 
- video of running app
+
 
 ## Documentation
 You can check up django documentation page for any further information.
